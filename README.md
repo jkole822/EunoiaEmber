@@ -1,38 +1,34 @@
-# sv
+# 🌿 EunoiaEmber
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+**EunoiaEmber** is a personal sobriety tracker built with [SvelteKit 5](https://kit.svelte.dev/), [Drizzle ORM](https://orm.drizzle.team/), and [PostgreSQL](https://www.postgresql.org/). It helps users visualize their recovery journey through intuitive UI elements, interactive charts, and structured entries like craving logs and relapse events.
 
-## Creating a project
+## 🧠 Purpose
 
-If you're seeing this, you've probably already done this step. Congrats!
+This app is designed to:
+- Track sobriety milestones
+- Log craving and slip data
+- Visualize progress over time
+- Foster self-reflection and resilience
+
+---
+
+## ⚙️ Tech Stack
+
+| Tech           | Description                          |
+|----------------|--------------------------------------|
+| SvelteKit 5    | Frontend framework                   |
+| Drizzle ORM    | Type-safe schema and migrations      |
+| PostgreSQL     | Relational database                  |
+| Chart.js       | Data visualization (e.g. bar charts) |
+| TypeScript     | Static typing                        |
+| TailwindCSS    | Utility-first styling                |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+git clone https://github.com/jkole822/EunoiaEmber.git
+cd EunoiaEmber
