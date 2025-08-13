@@ -56,6 +56,7 @@
 		{readOnly}
 		{required}
 	>
+		{@render base()}
 		<div class="mt-2">
 			{#if description}
 				<Field.HelperText class={DescriptionStyles}>

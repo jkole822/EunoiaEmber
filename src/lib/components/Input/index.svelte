@@ -11,13 +11,14 @@
 		className = '',
 		description,
 		errorMessage,
+		isTextArea,
 		label,
 		oninput,
 		name,
 		raiseLabel,
 		type = InputTypeEnum.text,
 		validationState = ValidationStateEnum.Valid,
-		value = $bindable(),
+		value = $bindable(''),
 		...rest
 	}: Props = $props();
 
@@ -34,15 +35,26 @@
 	class={[className, ContainerStyles]}
 	invalid={validationState === ValidationStateEnum.Invalid}
 >
-	<Field.Input
-		class={InputStyles}
-		data-raise-label={!!value || raiseLabel}
-		oninput={handleInput}
-		{autocomplete}
-		{name}
-		{type}
-		{value}
-	/>
+	{#if isTextArea}
+		<Field.Textarea
+			class={InputStyles}
+			data-raise-label={!!value || raiseLabel}
+			oninput={handleInput}
+			{autocomplete}
+			{name}
+			{value}
+		/>
+	{:else}
+		<Field.Input
+			class={InputStyles}
+			data-raise-label={!!value || raiseLabel}
+			oninput={handleInput}
+			{autocomplete}
+			{name}
+			{type}
+			{value}
+		/>
+	{/if}
 	<Field.Label class={LabelStyles}>{label}</Field.Label>
 	{#if description || errorMessage}
 		<div class="mt-2">

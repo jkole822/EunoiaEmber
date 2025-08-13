@@ -39,6 +39,7 @@ export interface Props {
 	disabled?: boolean;
 	errorMessage?: string;
 	id?: string;
+	isTextArea?: boolean;
 	label: string;
 	name?: string;
 	oninput?: (e: Event) => void;
