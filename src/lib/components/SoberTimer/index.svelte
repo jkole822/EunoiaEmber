@@ -1,5 +1,4 @@
 <script lang="ts">
-	// TODO: Incorporate times into calculations
 	import dayjs from 'dayjs';
 	import Timer from '$lib/components/Timer/index.svelte';
 	import { SubHeadingStyles } from '$lib/styles';
@@ -9,7 +8,7 @@
 
 	const lastSlipDate = $derived(
 		slipDates
-			.map((date) => dayjs(date))
+			.map((date) => dayjs(`${date.date} ${date.time}`))
 			.reduce((latest, current) => (current.isAfter(latest) ? current : latest))
 	);
 
