@@ -5,6 +5,8 @@
 	import SoberPieChart from '$lib/components/SoberPieChart/index.svelte';
 	import SoberTimer from '$lib/components/SoberTimer/index.svelte';
 	import StatBlock from '$lib/components/StatBlock/index.svelte';
+	import UrgeLineChart from '$lib/components/UrgeLineChart/index.svelte';
+	import { dateRange } from '$lib/utils/dateRange';
 	import { ButtonVariantsEnum } from '$lib/components/Button/types';
 	import type { PageData } from './$types';
 
@@ -27,6 +29,32 @@
 			{ iconClass: 'fa-percent', stat: String(percentSober), title: 'Percent Sober' }
 		];
 	});
+
+	const filledUrges = $derived.by(() => {
+		const oneYearAgo = dayjs().subtract(1, 'year');
+		const startDate = dayjs(anchorDate).isAfter(oneYearAgo) ? dayjs(anchorDate) : oneYearAgo;
+		const format = 'MM/DD/YYYY';
+
+		const urgeCopy = [...data.urges];
+		for (let date of dateRange(startDate, dayjs())) {
+			const formattedDate = date.format(format);
+			const match = urgeCopy.find(urge => dayjs(urge.date).format(format) === formattedDate)
+
+			if (!match) {
+				urgeCopy.push({
+					createdAt: null,
+					date: formattedDate,
+					id: "",
+					intensity: 0,
+					notes: null,
+					time: "",
+					userId: "",
+				})
+			}
+		}
+
+		return urgeCopy;
+	});
 </script>
 
 {#snippet updateTrackerCta()}
@@ -41,7 +69,9 @@
 
 <div class="my-10">
 	{#if data.tracker}
-		<div class="grid grid-cols-1 gap-2.5 mb-5 [@media(min-width:450px)]:grid-cols-2 [@media(min-width:900px)]:grid-cols-4">
+		<div
+			class="mb-5 grid grid-cols-1 gap-2.5 [@media(min-width:450px)]:grid-cols-2 [@media(min-width:900px)]:grid-cols-4"
+		>
 			{#each stats as stat, index (index)}
 				<StatBlock {...stat} />
 			{/each}
@@ -55,7 +85,8 @@
 			/>
 			<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} slipDates={data.slipDates} />
 		</div>
-		<SoberBarChart className="[&_canvas]:min-h-[250px]" {anchorDate} {slipDates} />
+		<SoberBarChart className="[&_canvas]:min-h-[250px] mb-5" {anchorDate} {slipDates} />
+		<UrgeLineChart className="[&_canvas]:min-h-[250px]" {anchorDate} urges={filledUrges} />
 	{:else}
 		<div class="flex flex-col items-center justify-center rounded-xl bg-primary-100 py-20">
 			<p class="font-mono text-3xl tracking-widest">
