@@ -53,7 +53,7 @@
 				{anchorTime}
 				{slipDates}
 			/>
-			<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} {slipDates} />
+			<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} slipDates={data.slipDates} />
 		</div>
 		<SoberBarChart className="[&_canvas]:min-h-[250px]" {anchorDate} {slipDates} />
 	{:else}
