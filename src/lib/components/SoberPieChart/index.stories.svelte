@@ -47,4 +47,6 @@
 
 <Story name="Default" />
 
+<Story name="One Year" args={{ anchorDate: today.subtract(1, 'year').format('YYYY-MM-DD') }} />
+
 <Story name="Widget" args={{ className: 'w-full md:w-1/2' }} />

@@ -5,9 +5,9 @@
 
 	const today = dayjs();
 	const mockSlipDates = [
-		today.subtract(1, 'day').format('YYYY-MM-DD'),
-		today.subtract(3, 'day').format('YYYY-MM-DD'),
-		today.subtract(7, 'day').format('YYYY-MM-DD')
+		{ date: today.subtract(1, 'day').format('YYYY-MM-DD'), time: '00:00' },
+		{ date: today.subtract(3, 'day').format('YYYY-MM-DD'), time: '00:00' },
+		{ date: today.subtract(7, 'day').format('YYYY-MM-DD'), time: '00:00' }
 	];
 
 	const { Story } = defineMeta({

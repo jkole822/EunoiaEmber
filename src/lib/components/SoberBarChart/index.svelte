@@ -10,7 +10,7 @@
 		Legend,
 		Title
 	} from 'chart.js';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { TriggerStyles } from './styles';
 	import type { Props } from './types';
 
@@ -124,8 +124,10 @@
 				}
 			}
 		});
+	});
 
-		return () => chart?.destroy();
+	onDestroy(() => {
+		chart?.destroy();
 	});
 </script>
 

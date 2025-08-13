@@ -1,7 +1,7 @@
 <script lang="ts">
 	import dayjs from 'dayjs';
 	import { Chart, PieController, ArcElement, Tooltip, Legend, Title } from 'chart.js';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { ToggleGroup } from '@ark-ui/svelte';
 	import { ToggleItemStyles } from './styles';
 	import type { Props } from './types';
@@ -97,8 +97,10 @@
 				}
 			}
 		});
+	});
 
-		return () => chart?.destroy();
+	onDestroy(() => {
+		chart?.destroy();
 	});
 </script>
 
