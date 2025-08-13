@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, integer, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const session = pgTable('session', {
 	id: text('id').primaryKey(),
@@ -28,6 +28,18 @@ export const tracker = pgTable('tracker', {
 	createdAt: timestamp('created_at').defaultNow()
 });
 
+export const urge = pgTable('urge', {
+	id: text('id').primaryKey(),
+	date: text('data').notNull(),
+	time: text('time').notNull(),
+	intensity: integer('intensity').notNull(),
+	notes: text('notes'),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id),
+	createdAt: timestamp('created_at').defaultNow()
+});
+
 export const user = pgTable('user', {
 	id: text('id').primaryKey(),
 	email: text('email').notNull().unique(),
@@ -40,5 +52,7 @@ export type SlipDate = typeof slipDate.$inferSelect;
 export type SlipDateInsert = typeof slipDate.$inferInsert;
 export type Tracker = typeof tracker.$inferSelect;
 export type TrackerInsert = typeof tracker.$inferInsert;
+export type Urge = typeof urge.$inferSelect;
+export type UrgeInsert = typeof urge.$inferInsert;
 export type User = typeof user.$inferSelect;
 export type UserInsert = typeof user.$inferInsert;

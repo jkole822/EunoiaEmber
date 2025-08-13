@@ -29,6 +29,20 @@
       "when": 1754436886680,
       "tag": "0003_common_vulcan",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1755095674439,
+      "tag": "0004_white_leper_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1755095938881,
+      "tag": "0005_premium_iron_patriot",
+      "breakpoints": true
     }
   ]
 }

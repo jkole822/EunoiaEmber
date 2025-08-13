@@ -57,6 +57,10 @@
 				control: 'text',
 				description: 'The unique identifier of the machine.'
 			},
+			isTextArea: {
+				control: 'boolean',
+				description: 'Indicates whether to use a textarea vs input.'
+			},
 			name: {
 				control: 'boolean',
 				description: 'The `name` attribute of the fields input. Useful for form submission.'

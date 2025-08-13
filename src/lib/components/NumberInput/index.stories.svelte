@@ -17,6 +17,7 @@ const {Story} = defineMeta({
     errorMessage: faker.lorem.sentence(),
     focusInputOnChange: true,
     inputMode: NumberInputModeEnum.Decimal,
+		label: faker.lorem.words(2),
     name: faker.lorem.word(),
     readOnly: false,
     required: true,
