@@ -3,6 +3,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { verify } from '@node-rs/argon2';
 import * as auth from '$lib/server/auth';
 import { db } from '$lib/server/db';
+import { getRequiredSting } from '$lib/utils';
 import { user } from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -16,16 +17,15 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
-		const emailRaw = formData.get('email');
-		const email = typeof emailRaw === 'string' ? emailRaw.trim() : '';
-		const passwordRaw = formData.get('password');
-		const password = typeof passwordRaw === 'string' ? passwordRaw.trim() : '';
+		const email = getRequiredSting(formData, 'email', 'Email');
+		const password = getRequiredSting(formData, 'password', 'Password')
 
-		if (!email || !password) {
-			return fail(400, { error: 'Email and password are required.' });
+		if (typeof email !== 'string' || typeof password !== 'string') {
+			return fail(400);
 		}
 
-		const results = await db.select().from(user).where(eq(user.email, email));
+		const emailToLowerCase = email.toLowerCase();
+		const results = await db.select().from(user).where(eq(user.email, emailToLowerCase));
 
 		const existingUser = results.at(0);
 		if (!existingUser) {
