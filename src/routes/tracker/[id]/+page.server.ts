@@ -1,6 +1,6 @@
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { getRequiredSting, requireLogin, validateAndRecordSlipDateTime } from '$lib/utils';
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const [existingTracker] = await db
 		.select()
 		.from(tracker)
-		.where(eq(tracker.id, trackerId))
+		.where(and(eq(tracker.userId, user.id), eq(tracker.id, trackerId)))
 		.limit(1);
 
 	if (!existingTracker) {
@@ -43,7 +43,7 @@ export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 		const trackerId = event.params.id;
-		const anchorDate = getRequiredSting(formData, 'anchorDate', 'Anchor Date')
+		const anchorDate = getRequiredSting(formData, 'anchorDate', 'Anchor Date');
 		const anchorTime = getRequiredSting(formData, 'anchorTime', 'Anchor Time');
 		const slipDates = formData.getAll('slipDate');
 		const slipTimes = formData.getAll('slipTime');
