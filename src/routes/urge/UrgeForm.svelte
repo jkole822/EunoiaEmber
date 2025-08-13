@@ -1,13 +1,23 @@
 <script lang="ts">
+	import dayjs from 'dayjs';
+	import Button from '$lib/components/Button/index.svelte';
 	import DatePicker from '$lib/components/DatePicker/index.svelte';
 	import Input from '$lib/components/Input/index.svelte';
 	import NumberInput from '$lib/components/NumberInput/index.svelte';
+	import { ButtonVariantsEnum } from '$lib/components/Button/types';
 	import { InputTypeEnum } from '$lib/components/Input/types';
 </script>
 
 <form class="my-10 rounded-lg bg-primary-100 p-10" method="post">
-	<h1 class="text-center text-5xl font-mono mb-10 tracking-wider">Log Urge</h1>
-	<DatePicker className="mb-7" label="Date" name="date" required />
+	<h1 class="mb-10 text-center font-mono text-5xl tracking-wider">Log Urge</h1>
+	<DatePicker
+		className="mb-7"
+		isDateUnavailable={(date) => dayjs(`${date.year}-${date.month}-${date.day}`).isAfter(dayjs())}
+		label="Date"
+		name="date"
+		outsideDaySelectable
+		required
+	/>
 	<Input
 		className="mb-7 [&_[type=time]_~_label]:bg-primary-100!"
 		label="Time"
@@ -32,4 +42,5 @@
 		label="Notes"
 		name="notes"
 	/>
+	<Button className="mt-10" type="submit" variant={ButtonVariantsEnum.Emphasis}>Submit</Button>
 </form>
