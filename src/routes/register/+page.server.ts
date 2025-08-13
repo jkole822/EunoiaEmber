@@ -2,7 +2,7 @@ import * as auth from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { hash } from '@node-rs/argon2';
 import { db } from '$lib/server/db';
-import { generateId } from '$lib/utils';
+import { generateId, getRequiredSting } from '$lib/utils';
 import { user } from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 import type { UserInsert } from '$lib/server/db/schema';
@@ -17,21 +17,16 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
-		const emailRaw = formData.get('email');
-		const passwordRaw = formData.get('password');
+		const email = getRequiredSting(formData, 'email', 'Email');
+		const password = getRequiredSting(formData, 'password', 'Password')
 
-		if (!emailRaw || !passwordRaw) {
-			return fail(400, { message: 'Email and password are required.' });
+		if (typeof email !== 'string' || typeof password !== 'string') {
+			return fail(400);
 		}
 
-		if (typeof emailRaw !== 'string' || typeof passwordRaw !== 'string') {
-			return fail(400, { message: 'Invalid form data.' });
-		}
+		const emailToLowerCase = email.toLowerCase();
 
-		const email = emailRaw.trim().toLowerCase();
-		const password = passwordRaw.trim();
-
-		if (!isValidEmail(email)) {
+		if (!isValidEmail(emailToLowerCase)) {
 			return fail(400, { message: 'Please provide a valid email address.' });
 		}
 
@@ -50,7 +45,7 @@ export const actions: Actions = {
 
 		const userValues: UserInsert = {
 			id: userId,
-			email,
+			email: emailToLowerCase,
 			passwordHash
 		};
 

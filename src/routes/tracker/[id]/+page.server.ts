@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { eq } from 'drizzle-orm';
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { requireLogin, validateAndRecordSlipDateTime } from '$lib/utils';
+import { getRequiredSting, requireLogin, validateAndRecordSlipDateTime } from '$lib/utils';
 import { slipDate, tracker } from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -43,17 +43,13 @@ export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 		const trackerId = event.params.id;
-		const anchorDate = formData.get('anchorDate');
-		const anchorTime = formData.get('anchorTime');
+		const anchorDate = getRequiredSting(formData, 'anchorDate', 'Anchor Date')
+		const anchorTime = getRequiredSting(formData, 'anchorTime', 'Anchor Time');
 		const slipDates = formData.getAll('slipDate');
 		const slipTimes = formData.getAll('slipTime');
 
-		if (!anchorDate || !anchorTime) {
-			return fail(400, { message: 'Anchor date and time are required.' });
-		}
-
 		if (typeof anchorDate !== 'string' || typeof anchorTime !== 'string') {
-			return fail(400, { message: 'Invalid form data.' });
+			return fail(400);
 		}
 
 		const format = 'YYYY-MM-DD HH:mm';
