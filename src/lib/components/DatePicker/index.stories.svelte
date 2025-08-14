@@ -207,7 +207,7 @@
 			},
 			validationState: {
 				control: { type: 'select' },
-				options: ['valid', 'invalid', 'none'],
+				options: ['valid', 'invalid'],
 				description: 'Validation state of the input field.',
 				table: { category: 'State' }
 			},

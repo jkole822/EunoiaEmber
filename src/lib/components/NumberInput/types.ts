@@ -28,7 +28,7 @@ export interface Props {
   formatOptions?: Intl.NumberFormatOptions;
   id?: string;
   inputMode?: NumberInputMode;
-	label?: string;
+	label: string;
   locale?: string;
 	onFocusChange?: (details: NumberInput.FocusChangeDetails) => void;
 	onValueChange?: (details: NumberInput.ValueChangeDetails) => void;
