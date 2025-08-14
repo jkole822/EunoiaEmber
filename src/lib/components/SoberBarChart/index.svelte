@@ -11,7 +11,7 @@
 		Title
 	} from 'chart.js';
 	import { onDestroy, onMount } from 'svelte';
-	import { TriggerStyles } from './styles';
+	import Pagination from '$lib/components/Pagination/index.svelte';
 	import type { Props } from './types';
 
 	let { anchorDate, className = '', slipDates = [] }: Props = $props();
@@ -132,15 +132,14 @@
 </script>
 
 <div class={[className, 'rounded-xl bg-primary-100 p-10']}>
-	<div class="mb-5 flex items-center justify-center gap-8">
-		<button aria-label="decrement year" class={TriggerStyles} onclick={() => activeYear--}>
-			<i aria-hidden="true" class="fa-solid fa-chevron-left"></i>
-		</button>
-		<div class="font-mono text-3xl">{activeYear}</div>
-		<button aria-label="increment year" class={TriggerStyles} onclick={() => activeYear++}
-			><i aria-hidden="true" class="fa-solid fa-chevron-right"></i></button
-		>
-	</div>
+	<Pagination
+		className="mb-5"
+		nextLabel="increment year"
+		onnext={() => activeYear++}
+		onprevious={() => activeYear--}
+		previousLabel="decrement year"
+		text={String(activeYear)}
+	/>
 	<div class="relative w-full max-w-full overflow-x-auto">
 		<canvas bind:this={canvasEl} class="h-auto w-full"></canvas>
 	</div>

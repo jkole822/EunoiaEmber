@@ -106,7 +106,7 @@
 				]
 			},
 			options: {
-				responsive: true,
+				maintainAspectRatio: false,
 				scales: {
 					x: {
 						ticks: {

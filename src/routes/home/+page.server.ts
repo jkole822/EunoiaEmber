@@ -1,4 +1,4 @@
-import { and, eq, gt } from 'drizzle-orm';
+import { and, eq, gt, sql } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { requireLogin } from '$lib/utils';
 import { slipDate, tracker, urge } from '$lib/server/db/schema';
@@ -22,7 +22,8 @@ export const load: PageServerLoad = async () => {
 	const existingUrges = await db
 		.select()
 		.from(urge)
-		.where(and(gt(urge.createdAt, oneYearAgo), eq(urge.userId, user.id)));
+		.where(and(gt(urge.createdAt, oneYearAgo), eq(urge.userId, user.id)))
+		.orderBy(sql`to_timestamp(${urge.date} || ' ' || ${urge.time}, 'MM/DD/YYYY HH24:MI') DESC`);
 
 	return {
 		user,
