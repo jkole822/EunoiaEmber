@@ -6,6 +6,7 @@
 	import SoberTimer from '$lib/components/SoberTimer/index.svelte';
 	import StatBlock from '$lib/components/StatBlock/index.svelte';
 	import UrgeLineChart from '$lib/components/UrgeLineChart/index.svelte';
+	import UrgeList from '$lib/components/UrgeList/index.svelte';
 	import { dateRange } from '$lib/utils/dateRange';
 	import { ButtonVariantsEnum } from '$lib/components/Button/types';
 	import type { PageData } from './$types';
@@ -38,23 +39,25 @@
 		const urgeCopy = [...data.urges];
 		for (let date of dateRange(startDate, dayjs())) {
 			const formattedDate = date.format(format);
-			const match = urgeCopy.find(urge => dayjs(urge.date).format(format) === formattedDate)
+			const match = urgeCopy.find((urge) => dayjs(urge.date).format(format) === formattedDate);
 
 			if (!match) {
 				urgeCopy.push({
 					createdAt: null,
 					date: formattedDate,
-					id: "",
+					id: '',
 					intensity: 0,
 					notes: null,
-					time: "",
-					userId: "",
-				})
+					time: '',
+					userId: ''
+				});
 			}
 		}
 
 		return urgeCopy;
 	});
+
+	const fiveMostRecentUrges = $derived(data.urges.slice(0, 5));
 </script>
 
 {#snippet updateTrackerCta()}
@@ -69,26 +72,31 @@
 
 <div class="my-10">
 	{#if data.tracker}
-		<div
-			class="mb-5 grid grid-cols-1 gap-2.5 [@media(min-width:450px)]:grid-cols-2 [@media(min-width:900px)]:grid-cols-4"
-		>
-			{#each stats as stat, index (index)}
-				<StatBlock {...stat} />
-			{/each}
+		<div class="flex flex-col gap-5">
+			<div
+				class="grid grid-cols-1 gap-2.5 [@media(min-width:450px)]:grid-cols-2 [@media(min-width:900px)]:grid-cols-4"
+			>
+				{#each stats as stat, index (index)}
+					<StatBlock {...stat} />
+				{/each}
+			</div>
+			<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+				<SoberPieChart
+					className="[&_canvas]:w-[90%] [@media(min-width:420px)]:[&_canvas]:w-auto"
+					{anchorDate}
+					{anchorTime}
+					{slipDates}
+				/>
+				<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} slipDates={data.slipDates} />
+			</div>
+			<SoberBarChart className="[&_canvas]:min-h-[250px]" {anchorDate} {slipDates} />
+			<h2 class="mt-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">Recent Urges</h2>
+			<UrgeList urges={fiveMostRecentUrges} />
+			<Button className="mb-10 mx-auto" href="/urge" variant={ButtonVariantsEnum.Emphasis}>View All</Button>
+			<UrgeLineChart className="[&_canvas]:min-h-[250px]" {anchorDate} urges={filledUrges} />
 		</div>
-		<div class="mb-5 grid grid-cols-1 gap-5 md:grid-cols-2">
-			<SoberPieChart
-				className="[&_canvas]:w-[90%] [@media(min-width:420px)]:[&_canvas]:w-auto"
-				{anchorDate}
-				{anchorTime}
-				{slipDates}
-			/>
-			<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} slipDates={data.slipDates} />
-		</div>
-		<SoberBarChart className="[&_canvas]:min-h-[250px] mb-5" {anchorDate} {slipDates} />
-		<UrgeLineChart className="[&_canvas]:min-h-[250px]" {anchorDate} urges={filledUrges} />
 	{:else}
-		<div class="flex flex-col items-center justify-center rounded-xl bg-primary-100 py-20">
+		<div class="flex flex-col items-center justify-center rounded-xl bg-primary-100 p-20">
 			<p class="font-mono text-3xl tracking-widest">
 				Your journey <span class="underline">matters</span>.
 			</p>

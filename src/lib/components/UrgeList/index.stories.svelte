@@ -2,35 +2,30 @@
 	import dayjs from 'dayjs';
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import { faker } from '@faker-js/faker';
-	import UrgeLineChart from './index.svelte';
+	import UrgeList from './index.svelte';
 
 	const today = dayjs();
 
 	const generateUrgeData = () =>
-		Array.from({ length: 370 }, (_, index) => ({
-			date: today.subtract(index + 1, 'day').format('YYYY-MM-DD'),
+		Array.from({ length: 10 }, (_, index) => ({
+			date: today.subtract(index + 1, 'day').format('MM/DD/YYYY'),
 			id: String(index),
 			intensity: Math.ceil(Math.random() * 10),
-			notes: faker.lorem.paragraph(),
+			notes: index === 0 ? '' : faker.lorem.paragraph(),
 			time: index % 2 === 0 ? '00:00' : '15:30',
 			userId: 'user',
 			createdAt: today.subtract(index + 1, 'day').toDate()
 		}));
 
 	const { Story } = defineMeta({
-		title: 'UrgeLineChart',
-		component: UrgeLineChart,
+		title: 'UrgeList',
+		component: UrgeList,
 		tags: ['autodocs'],
 		args: {
-			anchorDate: today.subtract(6, 'month').format('YYYY-MM-DD'),
 			className: '',
 			urges: generateUrgeData()
 		},
 		argTypes: {
-			anchorDate: {
-				control: 'text',
-				description: 'The starting date for sobriety tracking (YYYY-MM-DD format).'
-			},
 			className: {
 				control: 'text',
 				description: 'Optional custom class for styling the chart container.'
@@ -43,7 +38,7 @@
 						summary: `{
 							id: string,
 							date: string (MM/DD/YYYY format),
-							time: string,
+							time: string (24 hour format),
 							intensity: number,
 							notes: string
 							userId: string (reference)
@@ -56,6 +51,6 @@
 	});
 </script>
 
-<Story name="Default" />
+<Story name="Dashboard" />
 
-<Story name="One Year" args={{ anchorDate: today.subtract(1, 'year').format('YYYY-MM-DD') }} />
+<Story name="Listing Page" args={{ anchorDate: today.subtract(1, 'year').format('YYYY-MM-DD') }} />

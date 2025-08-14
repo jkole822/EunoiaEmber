@@ -1,6 +1,6 @@
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { getRequiredSting, requireLogin, validateAndRecordSlipDateTime } from '$lib/utils';
@@ -26,16 +26,13 @@ export const load: PageServerLoad = async ({ params }) => {
 	const existingSlipDates = await db
 		.select()
 		.from(slipDate)
-		.where(eq(slipDate.trackerId, trackerId));
-
-	const sortedSlipDates = existingSlipDates.toSorted((a, b) =>
-		dayjs(`${a.date} ${a.time}`).isBefore(dayjs(`${b.date} ${b.time}`)) ? -1 : 1
-	);
+		.where(eq(slipDate.trackerId, trackerId))
+		.orderBy(sql`to_timestamp(${slipDate.date} || ' ' || ${slipDate.time}, 'YYYY-MM-DD HH24:MI')`);
 
 	return {
 		user,
 		tracker: existingTracker,
-		slipDates: sortedSlipDates
+		slipDates: existingSlipDates
 	};
 };
 

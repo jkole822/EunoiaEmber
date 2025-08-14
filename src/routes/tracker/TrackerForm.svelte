@@ -1,7 +1,4 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
-	import customParseFormat from 'dayjs/plugin/customParseFormat';
-	import advancedFormat from 'dayjs/plugin/advancedFormat';
 	import Button from '$lib/components/Button/index.svelte';
 	import Input from '$lib/components/Input/index.svelte';
 	import NumberInput from '$lib/components/NumberInput/index.svelte';
@@ -9,6 +6,7 @@
 	import { steps } from './steps';
 	import { ParagraphStyles, SlipDateTimeInputContainer, TitleStyles } from './styles';
 	import { SubHeadingStyles } from '$lib/styles';
+	import { formatDate } from '$lib/utils/formatDate';
 	import { ButtonVariantsEnum } from '$lib/components/Button/types';
 	import { InputTypeEnum } from '$lib/components/Input/types';
 	import type { ActionData } from './create/$types';
@@ -34,13 +32,6 @@
 	let previousPage = $state(1);
 	let slipCount = $state(slipDates ? String(slipDates.length) : '0');
 	let slipDatesArray = $state(slipDates || []);
-
-	dayjs.extend(customParseFormat);
-	dayjs.extend(advancedFormat);
-
-	const formatDate = (date: string, time: string) => {
-		return dayjs(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format('MMMM Do, YYYY [@] h:mm A');
-	};
 
 	let formattedAnchorDateTime = $derived(
 		anchorDate && anchorTime ? formatDate(anchorDate, anchorTime) : ''

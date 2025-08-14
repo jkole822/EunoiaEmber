@@ -58,7 +58,7 @@
 					Sobriety Tracking
 				</h3>
 				<p class="mt-2">
-					Gauge your progress over time with an alternative and encouraging approach.
+					Gauge your progress over time with a holistic and encouraging approach.
 				</p>
 			</div>
 			<div class="rounded-md bg-primary-100/70 p-2 ring-2 ring-primary-300">
@@ -69,9 +69,9 @@
 			</div>
 			<div class="rounded-md bg-primary-100/70 p-2 ring-2 ring-primary-300">
 				<h3 class="text-2xl font-black tracking-widest text-primary-500 lowercase md:text-3xl">
-					Craving Log
+					Urge Log
 				</h3>
-				<p class="mt-2">Simple log to record date, intensity, and notes on your cravings to help you learn and adapt.</p>
+				<p class="mt-2">Simple log to record date, intensity, and notes on your urges to help you learn and adapt.</p>
 			</div>
 		</div>
 	</div>
