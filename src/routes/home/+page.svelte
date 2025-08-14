@@ -90,10 +90,12 @@
 				<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} slipDates={data.slipDates} />
 			</div>
 			<SoberBarChart className="[&_canvas]:min-h-[250px]" {anchorDate} {slipDates} />
-			<h2 class="mt-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">Recent Urges</h2>
-			<UrgeList urges={fiveMostRecentUrges} />
-			<Button className="mb-10 mx-auto" href="/urge" variant={ButtonVariantsEnum.Emphasis}>View All</Button>
-			<UrgeLineChart className="[&_canvas]:min-h-[250px]" {anchorDate} urges={filledUrges} />
+			{#if data.urges.length > 0}
+				<h2 class="mt-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">Recent Urges</h2>
+				<UrgeList urges={fiveMostRecentUrges} />
+				<Button className="mb-10 mx-auto" href="/urge" variant={ButtonVariantsEnum.Emphasis}>View All</Button>
+				<UrgeLineChart className="[&_canvas]:min-h-[250px]" {anchorDate} urges={filledUrges} />
+			{/if}
 		</div>
 	{:else}
 		<div class="flex flex-col items-center justify-center rounded-xl bg-primary-100 p-20">
