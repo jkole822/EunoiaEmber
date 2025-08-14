@@ -29,11 +29,9 @@
 
 {#snippet base()}
 	<NumberInput.Root {...rest} {disabled} bind:value>
-		{#if label}
-			<NumberInput.Label class={LabelStyles}>
-				{label}
-			</NumberInput.Label>
-		{/if}
+		<NumberInput.Label class={LabelStyles}>
+			{label}
+		</NumberInput.Label>
 		<div class={InputContainerStyles}>
 			<NumberInput.Input class={InputStyles} />
 			<NumberInput.Control class={ControlStyles}>

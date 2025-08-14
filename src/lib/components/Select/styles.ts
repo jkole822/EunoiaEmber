@@ -3,6 +3,7 @@ import { oneLine } from "common-tags";
 export const ContentStyles = oneLine`
 bg-primary-100
 max-h-50
+outline-hidden
 overflow-scroll
 px-3
 py-2

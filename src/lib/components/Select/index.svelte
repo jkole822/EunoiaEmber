@@ -25,7 +25,7 @@
 		readOnly,
 		required,
 		validationState,
-		value,
+		value = $bindable(),
 		withField,
 		...rest
 	}: Props = $props();

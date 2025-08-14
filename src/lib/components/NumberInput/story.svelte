@@ -8,6 +8,6 @@
 	let value = $state('1');
 </script>
 
-<NumberInput {...props} {value} onValueChange={(details) => (value = details.value)} />
+<NumberInput {...props} bind:value />
 <p class={SubHeadingStyles}>Binding Check</p>
 <p class={ParagraphStyles}>{value}</p>
