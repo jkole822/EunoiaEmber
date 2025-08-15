@@ -51,12 +51,12 @@
 		<Button
 			className="mb-5 w-full mx-auto 2xs:w-52 xs:hidden"
 			href="/urge/create"
-			variant={ButtonVariantsEnum.Emphasis}>Log New</Button
+			variant={ButtonVariantsEnum.Emphasis}>Record Urge</Button
 		>
 		<UrgeList className="mb-5" urges={urgeData} />
-		<div class="flex items-center justify-between">
+		<div class="flex items-center justify-center xs:justify-between">
 			<Button className="hidden xs:flex" href="/urge/create" variant={ButtonVariantsEnum.Emphasis}
-				>Log New</Button
+				>Record Urge</Button
 			>
 			<Pagination
 				{disableNext}
@@ -78,7 +78,7 @@
 				the button below to
 				<span class="rounded-full bg-primary-800 px-2 py-1 text-primary-100">record</span> the details.
 			</p>
-			<Button href="/urge/create" variant={ButtonVariantsEnum.Emphasis}>Log New</Button>
+			<Button href="/urge/create" variant={ButtonVariantsEnum.Emphasis}>Record Urge</Button>
 		</div>
 	{/if}
 </div>
