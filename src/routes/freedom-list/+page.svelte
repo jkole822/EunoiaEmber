@@ -53,14 +53,14 @@
 		<Button
 			className="mb-5 w-full mx-auto 2xs:w-52 xs:hidden"
 			href="/freedom-list/create"
-			variant={ButtonVariantsEnum.Emphasis}>Log New</Button
+			variant={ButtonVariantsEnum.Emphasis}>Add Motivation</Button
 		>
 		<FreedomList className="mb-5" freedomListItems={freedomListData} />
-		<div class="flex items-center justify-between">
+		<div class="flex items-center justify-center xs:justify-between">
 			<Button
 				className="hidden xs:flex"
 				href="/freedom-list/create"
-				variant={ButtonVariantsEnum.Emphasis}>Create</Button
+				variant={ButtonVariantsEnum.Emphasis}>Add Motivation</Button
 			>
 			<Pagination
 				{disableNext}
@@ -88,7 +88,7 @@
 				the button below when beginning your journey with
 				<span class="font-mono text-lg text-primary-600">EmberEunoia</span>.
 			</p>
-			<Button href="/freedom-list/create" variant={ButtonVariantsEnum.Emphasis}>Log New</Button>
+			<Button href="/freedom-list/create" variant={ButtonVariantsEnum.Emphasis}>Add Reason</Button>
 		</div>
 	{/if}
 </div>
