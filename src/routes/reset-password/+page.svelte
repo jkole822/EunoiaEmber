@@ -43,7 +43,7 @@
 			required
 			type={InputTypeEnum.password}
 		/>
-		<Button className="mb-5 w-full" type="submit" variant={ButtonVariantsEnum.Emphasis}
+		<Button className="mt-5 w-full" type="submit" variant={ButtonVariantsEnum.Emphasis}
 			>Submit</Button
 		>
 	</form>
