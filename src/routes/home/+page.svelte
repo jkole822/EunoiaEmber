@@ -1,6 +1,7 @@
 <script lang="ts">
 	import dayjs from 'dayjs';
 	import Button from '$lib/components/Button/index.svelte';
+	import FreedomList from '$lib/components/FreedomList/index.svelte';
 	import SoberBarChart from '$lib/components/SoberBarChart/index.svelte';
 	import SoberPieChart from '$lib/components/SoberPieChart/index.svelte';
 	import SoberTimer from '$lib/components/SoberTimer/index.svelte';
@@ -12,8 +13,9 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	let { anchorDate, anchorTime } = data.tracker;
 
+	const anchorDate = $derived(data.tracker?.anchorDate || dayjs().format('YYYY-MM-DD'));
+	const anchorTime = $derived(data.tracker?.anchorTime || dayjs().format('HH:mm'));
 	const slipDates = $derived(data.slipDates.map((date) => date.date));
 
 	const stats = $derived.by(() => {
@@ -61,13 +63,15 @@
 </script>
 
 {#snippet updateTrackerCta()}
-	<Button
-		className="mt-10"
-		href={`/tracker/${data.tracker.id}`}
-		variant={ButtonVariantsEnum.Emphasis}
-	>
-		Update
-	</Button>
+	{#if data.tracker}
+		<Button
+			className="mt-10"
+			href={`/tracker/${data.tracker.id}`}
+			variant={ButtonVariantsEnum.Emphasis}
+		>
+			Update
+		</Button>
+	{/if}
 {/snippet}
 
 <div class="my-10">
@@ -90,10 +94,21 @@
 				<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} slipDates={data.slipDates} />
 			</div>
 			<SoberBarChart className="[&_canvas]:min-h-[250px]" {anchorDate} {slipDates} />
+			{#if data.freedomListItems.length > 0}
+				<h2 class="mt-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">
+					Freedom Reflections
+				</h2>
+				<FreedomList freedomListItems={data.freedomListItems} />
+				<Button className="mx-auto" href="/freedom-list" variant={ButtonVariantsEnum.Emphasis}
+					>View All</Button
+				>
+			{/if}
 			{#if data.urges.length > 0}
 				<h2 class="mt-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">Recent Urges</h2>
 				<UrgeList urges={fiveMostRecentUrges} />
-				<Button className="mb-10 mx-auto" href="/urge" variant={ButtonVariantsEnum.Emphasis}>View All</Button>
+				<Button className="mb-10 mx-auto" href="/urge" variant={ButtonVariantsEnum.Emphasis}
+					>View All</Button
+				>
 				<UrgeLineChart className="[&_canvas]:min-h-[250px]" {anchorDate} urges={filledUrges} />
 			{/if}
 		</div>

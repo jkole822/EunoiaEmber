@@ -14,8 +14,9 @@
 	import type { Props } from './types';
 
 	let {
-		className = '',
 		checked = $bindable(false),
+		children,
+		className = '',
 		description,
 		disabled,
 		errorMessage,
@@ -38,6 +39,9 @@
 			</div>
 			<Switch.Label class={LabelStyles}>{label}</Switch.Label>
 		</div>
+		{#if children}
+			{@render children()}
+		{/if}
 		<Switch.HiddenInput />
 	</Switch.Root>
 {/snippet}
@@ -51,7 +55,7 @@
 		{required}
 	>
 		{@render base()}
-		<div class="mt-4">
+		<div>
 			{#if description}
 				<Field.HelperText class={DescriptionStyles}>
 					{description}

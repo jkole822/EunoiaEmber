@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import Button from '$lib/components/Button/index.svelte';
+	import FreedomList from '$lib/components/FreedomList/index.svelte';
 	import Pagination from '$lib/components/Pagination/index.svelte';
-	import UrgeList from '$lib/components/UrgeList/index.svelte';
-	import { URGE_LIMIT } from '$lib/constants';
+	import { FREEDOM_LIST_ITEM_LIMIT } from '$lib/constants';
 	import { ButtonVariantsEnum } from '$lib/components/Button/types';
 	import type { PageData } from './$types';
 
@@ -12,9 +12,9 @@
 	let nextCursor = $state(data.cursor);
 	let page = $state(1);
 	let prevCursor: string | undefined = $state();
-	let urgeData = $state(data.urges);
+	let freedomListData = $state(data.freedomListItems);
 
-	const shownItems = $derived((page - 1) * URGE_LIMIT + urgeData.length);
+	const shownItems = $derived((page - 1) * FREEDOM_LIST_ITEM_LIMIT + freedomListData.length);
 	const disableNext = $derived(!nextCursor || shownItems >= data.count);
 	const disablePrev = $derived(!prevCursor || page === 1);
 
@@ -24,10 +24,10 @@
 		if (cursor) params.set('cursor', cursor);
 		if (direction) params.set('direction', direction);
 
-		const res = await fetch(`/urge?${params.toString()}`);
+		const res = await fetch(`/freedom-list?${params.toString()}`);
 		const data = await res.json();
 
-		urgeData = data.urges;
+		freedomListData = data.freedomListItems;
 		nextCursor = data.nextCursor;
 		prevCursor = data.prevCursor;
 	};
@@ -46,39 +46,49 @@
 </script>
 
 <div class="py-10">
-	{#if urgeData.length > 0}
-		<h2 class="mb-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">Urge Log</h2>
+	{#if freedomListData.length > 0}
+		<h2 class="mb-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">
+			Freedom Reflections
+		</h2>
 		<Button
 			className="mb-5 w-full mx-auto 2xs:w-52 xs:hidden"
-			href="/urge/create"
+			href="/freedom-list/create"
 			variant={ButtonVariantsEnum.Emphasis}>Log New</Button
 		>
-		<UrgeList className="mb-5" urges={urgeData} />
+		<FreedomList className="mb-5" freedomListItems={freedomListData} />
 		<div class="flex items-center justify-between">
-			<Button className="hidden xs:flex" href="/urge/create" variant={ButtonVariantsEnum.Emphasis}
-				>Log New</Button
+			<Button
+				className="hidden xs:flex"
+				href="/freedom-list/create"
+				variant={ButtonVariantsEnum.Emphasis}>Create</Button
 			>
 			<Pagination
 				{disableNext}
 				{disablePrev}
-				nextLabel="display next page of urges"
+				nextLabel="display next page of freedom list items"
 				onnext={handleNext}
 				onprevious={handlePrevious}
-				previousLabel="display previous page of urges"
+				previousLabel="display previous page of freedom list items"
 				text={String(page)}
 			/>
 		</div>
 	{:else}
 		<div class="flex flex-col items-center justify-center rounded-xl bg-primary-100 p-20">
-			<h2 class="mb-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">Urge Log</h2>
+			<h2 class="mb-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">
+				Freedom Reflections
+			</h2>
 			<p class="mb-5">
-				This section shows the <span class="underline">history of urges</span> you’ve logged in the
-				app. When you feel another urge,
-				<span class="font-cursive text-2xl text-primary-600">tap</span>
-				the button below to
-				<span class="rounded-full bg-primary-800 px-2 py-1 text-primary-100">record</span> the details.
+				This section showcases the many reasons you've chosen to embrace your <span
+					class="underline">new life</span
+				>. Reflect on these for
+				<span class="rounded-full bg-primary-800 px-2 py-1 text-primary-100">motivation</span>
+				and <span class="rounded-full bg-primary-800 px-2 py-1 text-primary-100">clarity</span>.
+				Challenge yourself to add a new reason each day by
+				<span class="font-cursive text-2xl text-primary-600">tapping</span>
+				the button below when beginning your journey with
+				<span class="font-mono text-lg text-primary-600">EmberEunoia</span>.
 			</p>
-			<Button href="/urge/create" variant={ButtonVariantsEnum.Emphasis}>Log New</Button>
+			<Button href="/freedom-list/create" variant={ButtonVariantsEnum.Emphasis}>Log New</Button>
 		</div>
 	{/if}
 </div>

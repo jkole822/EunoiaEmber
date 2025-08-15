@@ -1,0 +1,1 @@
+ALTER TABLE "freedomListItem" RENAME COLUMN "text" TO "reason";

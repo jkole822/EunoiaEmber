@@ -1,4 +1,5 @@
-import { oneLine } from "common-tags";
+import { oneLine } from 'common-tags';
+import { LabelStyles as BaseLabelStyles } from '$lib/styles';
 
 export const ContainerStyles = oneLine`
 block
@@ -52,8 +53,8 @@ switch-control
 
 in-data-invalid:ring-red-500
 
-after:[background:linear-gradient(transparent_50%,_--alpha(var(--color-primary-100)_/_0.15)_0)_0_50%_/_50%_100%,_repeating-linear-gradient(90deg,_var(--color-primary-100)_0,_var(--color-primary-100),_var(--color-primary-100)_20%,_var(--color-primary-100)_20%,_var(--color-primary-100)_40%)_0_50%_/_50%_100%,_radial-gradient(circle_at_50%_50%,_var(--color-primary-100)_30%,_transparent_26%)]
-after:[border-left:0.4em_solid_var(--color-primary-100)_!important]
+after:[background:linear-gradient(transparent_50%,_--alpha(var(--color-primary-200)_/_0.15)_0)_0_50%_/_50%_100%,_repeating-linear-gradient(90deg,_var(--color-primary-200)_0,_var(--color-primary-200),_var(--color-primary-200)_20%,_var(--color-primary-200)_20%,_var(--color-primary-200)_40%)_0_50%_/_50%_100%,_radial-gradient(circle_at_50%_50%,_var(--color-primary-200)_30%,_transparent_26%)]
+after:[border-left:0.4em_solid_var(--color-primary-200)_!important]
 after:[border-right:0_solid_transparent_!important]
 after:[border:0.25em_solid_transparent]
 after:[transition:border-left-color_0.1s_0.3s_ease-out,_translate_0.4s,_transform_0.4s]
@@ -73,17 +74,18 @@ after:w-[2em]
 
 export const FlexContainerStyles = oneLine`
 flex
-gap-8
+flex-col
+gap-2
 items-center
 switch-flex-container
 `;
 
 export const LabelStyles = oneLine`
+${BaseLabelStyles}
 cursor-pointer
 duration-300
 relative
 switch-label
-text-primary-200
 transition-all
 
 after:[transition-timing-function:cubic-bezier(0.25,0.8,0.25,1)]
@@ -112,7 +114,7 @@ h-[3.3em]
 export const ThumbStyles = oneLine`
 -left-[0.6em]
 absolute
-bg-primary-100
+bg-primary-200
 block
 duration-400
 h-[0.5em]
