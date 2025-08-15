@@ -35,6 +35,9 @@ importers:
       drizzle-orm:
         specifier: ^0.40.0
         version: 0.40.1(@neondatabase/serverless@0.10.4)(@types/pg@8.11.6)(gel@2.1.1)
+      resend:
+        specifier: ^6.0.1
+        version: 6.0.1
       svelte-chartjs:
         specifier: ^3.1.5
         version: 3.1.5(chart.js@4.5.0)(svelte@5.36.16)
@@ -2490,6 +2493,15 @@ packages:
   redent@3.0.0:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
     engines: {node: '>=8'}
+
+  resend@6.0.1:
+    resolution: {integrity: sha512-xNZ0gKAOqQcH83lXsqNOwBbpKROnsZpQr9mXRdG6hrHTF9G9Il2pkoTRtq7rJzXMvCZX+I79oahsbSeaYOWRFA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@react-email/render': ^1.1.0
+    peerDependenciesMeta:
+      '@react-email/render':
+        optional: true
 
   resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
@@ -5189,6 +5201,8 @@ snapshots:
     dependencies:
       indent-string: 4.0.0
       strip-indent: 3.0.0
+
+  resend@6.0.1: {}
 
   resolve-from@4.0.0: {}
 

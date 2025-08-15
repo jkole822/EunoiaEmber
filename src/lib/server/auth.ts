@@ -14,22 +14,25 @@ export function generateSessionToken() {
 	return encodeBase64url(bytes);
 }
 
-export async function createSession(token: string, userId: string) {
+export async function createSession(
+	token: string,
+	userId: string,
+	expiresAt = new Date(Date.now() + DAY_IN_MS * 30)
+) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: table.Session = {
 		id: sessionId,
 		userId,
-		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
+		expiresAt
 	};
 	await db.insert(table.session).values(session);
 	return session;
 }
 
-export async function validateSessionToken(token: string) {
+export async function validateSessionToken(token: string, skipRenewal = false) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const [result] = await db
 		.select({
-			// Adjust user table here to tweak returned data
 			user: { id: table.user.id, email: table.user.email },
 			session: table.session
 		})
@@ -49,7 +52,7 @@ export async function validateSessionToken(token: string) {
 	}
 
 	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
-	if (renewSession) {
+	if (renewSession && !skipRenewal) {
 		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
 		await db
 			.update(table.session)
