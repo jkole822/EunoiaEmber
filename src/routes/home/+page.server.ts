@@ -1,21 +1,24 @@
-import { and, eq, gt, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, sql } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { requireLogin } from '$lib/utils';
-import { slipDate, tracker, urge } from '$lib/server/db/schema';
+import { freedomListItem, slipDate, tracker, urge } from '$lib/server/db/schema';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const user = requireLogin();
-	const [existingTracker] = await db
-		.select()
-		.from(tracker)
-		.where(eq(tracker.userId, user.id))
-		.limit(1);
+	const existingTracker = await db.query.tracker.findFirst({
+		where: eq(tracker.userId, user.id)
+	});
 
-	const existingSlipDates = await db
-		.select()
-		.from(slipDate)
-		.where(eq(slipDate.trackerId, existingTracker?.id));
+	const existingSlipDates = await db.query.slipDate.findMany({
+		where: eq(slipDate.trackerId, existingTracker?.id ?? '')
+	});
+
+	const existingFreedomListItems = await db.query.freedomListItem.findMany({
+		where: eq(freedomListItem.userId, user.id),
+		orderBy: [sql`RANDOM()`],
+		limit: 5
+	});
 
 	const oneYearAgo = new Date();
 	oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
@@ -26,9 +29,10 @@ export const load: PageServerLoad = async () => {
 		.orderBy(sql`to_timestamp(${urge.date} || ' ' || ${urge.time}, 'MM/DD/YYYY HH24:MI') DESC`);
 
 	return {
-		user,
-		tracker: existingTracker,
+		freedomListItems: existingFreedomListItems,
 		slipDates: existingSlipDates,
-		urges: existingUrges
+		tracker: existingTracker,
+		urges: existingUrges,
+		user
 	};
 };

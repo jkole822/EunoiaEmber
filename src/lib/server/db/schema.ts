@@ -1,4 +1,16 @@
-import { pgTable, integer, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, integer, text, timestamp, pgEnum } from 'drizzle-orm/pg-core';
+
+export const polarityEnum = pgEnum('polarity', ['positive', 'negative']);
+
+export const freedomListItem = pgTable('freedomListItem', {
+	id: text('id').primaryKey(),
+	polarity: polarityEnum().notNull(),
+	reason: text('reason').notNull(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id),
+	createdAt: timestamp('created_at').defaultNow()
+});
 
 export const session = pgTable('session', {
 	id: text('id').primaryKey(),
@@ -47,6 +59,8 @@ export const user = pgTable('user', {
 	createdAt: timestamp('created_at').defaultNow()
 });
 
+export type FreedomListItem = typeof freedomListItem.$inferSelect;
+export type FreedomListItemInsert = typeof freedomListItem.$inferInsert;
 export type Session = typeof session.$inferSelect;
 export type SlipDate = typeof slipDate.$inferSelect;
 export type SlipDateInsert = typeof slipDate.$inferInsert;
