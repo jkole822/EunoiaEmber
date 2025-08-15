@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import NavigationMenu from '$lib/components/NavigationMenu/index.svelte';
-	import { navigationLinks } from './links';
+	import { navigationLinks } from '$lib/navigationLinks';
 	import '../app.css';
 	import { onMount } from 'svelte';
 

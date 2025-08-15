@@ -18,7 +18,7 @@ export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 		const email = getRequiredSting(formData, 'email', 'Email');
-		const password = getRequiredSting(formData, 'password', 'Password')
+		const password = getRequiredSting(formData, 'password', 'Password');
 
 		if (typeof email !== 'string' || typeof password !== 'string') {
 			return fail(400);
@@ -34,22 +34,22 @@ export const actions: Actions = {
 			return fail(400, { message: 'Password must be at least 6 characters long.' });
 		}
 
-		const userId = generateId();
-
-		const passwordHash = await hash(password, {
-			memoryCost: 19456,
-			timeCost: 2,
-			outputLen: 32,
-			parallelism: 1
-		});
-
-		const userValues: UserInsert = {
-			id: userId,
-			email: emailToLowerCase,
-			passwordHash
-		};
-
 		try {
+			const userId = generateId();
+
+			const passwordHash = await hash(password, {
+				memoryCost: 19456,
+				timeCost: 2,
+				outputLen: 32,
+				parallelism: 1
+			});
+
+			const userValues: UserInsert = {
+				id: userId,
+				email: emailToLowerCase,
+				passwordHash
+			};
+
 			await db.insert(user).values(userValues);
 			const sessionToken = auth.generateSessionToken();
 			const session = await auth.createSession(sessionToken, userId);

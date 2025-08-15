@@ -23,32 +23,24 @@
 		class="rounded-br-md rounded-bl-md bg-primary-100 px-10 py-10 md:rounded-tr-md md:rounded-br-md md:px-8 md:py-20"
 		method="post"
 	>
-		<h1 class="mb-10 text-center font-mono text-5xl">Sign In</h1>
+		<h1 class="mb-10 text-center font-mono text-5xl">Forgot Password?</h1>
 		{#if form?.message}
-			<p class="mb-3 text-center font-mono text-red-600">{form.message}</p>
+			<p class="mb-3 text-center font-mono text-primary-700">{form.message}</p>
 		{/if}
 		<Input
 			autocomplete={AutoCompleteEnum.email}
 			className="[&_input:focus_~_label]:bg-primary-100 [&_input]:data-[raise-label=true]:[&_~_label]:bg-primary-100 mb-5"
+			description="Instructions will be sent to your registered email."
 			label="Email"
 			name="email"
 			required
 			type={InputTypeEnum.email}
 		/>
-		<Input
-			autocomplete={AutoCompleteEnum.currentPassword}
-			className="[&_input:focus_~_label]:bg-primary-100 [&_input]:data-[raise-label=true]:[&_~_label]:bg-primary-100 mb-1"
-			label="Password"
-			name="password"
-			required
-			type={InputTypeEnum.password}
-		/>
-		<a class="mb-5 block text-right underline" href="/request-password-reset">Forgot Password</a>
 		<Button className="mb-5 w-full" type="submit" variant={ButtonVariantsEnum.Emphasis}
-			>Sign In</Button
+			>Submit</Button
 		>
 		<div class="text-center">
-			Need an account? <a class="underline" href="/register">Sign Up</a>
+			Return to <a class="underline" href="/register">Sign In</a>
 		</div>
 	</form>
 </div>

@@ -43,7 +43,7 @@
 			required
 			type={InputTypeEnum.password}
 		/>
-		<a class="mb-5 block text-right underline" href="/password-reset">Forgot Password</a>
+		<a class="mb-5 block text-right underline" href="/request-password-reset">Forgot Password</a>
 		<Button className="mb-5 w-full" type="submit" variant={ButtonVariantsEnum.Emphasis}
 			>Register</Button
 		>
