@@ -16,7 +16,7 @@
 
 	const anchorDate = $derived(data.tracker?.anchorDate || dayjs().format('YYYY-MM-DD'));
 	const anchorTime = $derived(data.tracker?.anchorTime || dayjs().format('HH:mm'));
-	const slipDates = $derived(data.slipDates.map((date) => date.date));
+	const slipDates = $derived(data.tracker?.slipDates.map((date) => date.date) || []);
 
 	const stats = $derived.by(() => {
 		const daysSinceAnchor = dayjs().diff(dayjs(anchorDate), 'day');
@@ -91,7 +91,7 @@
 					{anchorTime}
 					{slipDates}
 				/>
-				<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} slipDates={data.slipDates} />
+				<SoberTimer {anchorDate} {anchorTime} cta={updateTrackerCta} slipDates={data.tracker.slipDates} />
 			</div>
 			<SoberBarChart className="[&_canvas]:min-h-[250px]" {anchorDate} {slipDates} />
 			{#if data.freedomListItems.length > 0}

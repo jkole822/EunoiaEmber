@@ -13,11 +13,9 @@ dayjs.extend(customParseFormat);
 
 export const load: PageServerLoad = async () => {
 	const user = requireLogin();
-	const [existingTracker] = await db
-		.select()
-		.from(tracker)
-		.where(eq(tracker.userId, user.id))
-		.limit(1);
+	const existingTracker = await db.query.tracker.findFirst({
+		where: eq(tracker.userId, user.id)
+	})
 
 	if (existingTracker) {
 		return redirect(302, `/tracker/${existingTracker.id}`);
