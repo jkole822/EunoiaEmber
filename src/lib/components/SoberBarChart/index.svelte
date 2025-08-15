@@ -1,22 +1,12 @@
 <script lang="ts">
 	import dayjs from 'dayjs';
-	import {
-		Chart,
-		BarController,
-		BarElement,
-		CategoryScale,
-		LinearScale,
-		Tooltip,
-		Legend,
-		Title
-	} from 'chart.js';
+	import Chart from 'chart.js/auto';
 	import { onDestroy, onMount } from 'svelte';
 	import Pagination from '$lib/components/Pagination/index.svelte';
 	import type { Props } from './types';
 
 	let { anchorDate, className = '', slipDates = [] }: Props = $props();
 
-	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title);
 	let canvasEl: HTMLCanvasElement;
 	let chart: Chart | null = $state(null);
 	const labels = [
@@ -38,9 +28,15 @@
 
 	let dataEachMonth = $derived(
 		labels.map((month) => {
-			const monthYear = dayjs(`${month} ${activeYear}`);
+			const monthIndex = labels.indexOf(month);
+			const monthOfYear = dayjs().year(activeYear).month(monthIndex);
+			const monthStart = monthOfYear.startOf('month');
+			const monthEnd   = monthOfYear.endOf('month');
 
-			if (dayjs().isBefore(monthYear) || dayjs(anchorDate).isAfter(monthYear.endOf('month'))) {
+			// If today is before the start of the month of the current iteration,
+			// or if the anchor date is after the end of the month of the current iteration,
+			// return 0 slips and 0 sobers to show no data for that month.
+			if (dayjs().isBefore(monthStart) || dayjs(anchorDate).isAfter(monthEnd)) {
 				return { slipCount: 0, soberCount: 0 };
 			}
 
@@ -48,8 +44,8 @@
 				const currentSlipDate = dayjs(curr);
 
 				if (
-					currentSlipDate.isAfter(monthYear.startOf('month')) &&
-					currentSlipDate.isBefore(monthYear.endOf('month'))
+					currentSlipDate.isAfter(monthStart) &&
+					currentSlipDate.isBefore(monthEnd)
 				) {
 					return acc + 1;
 				}
@@ -57,7 +53,7 @@
 				return acc;
 			}, 0);
 
-			const soberCount = monthYear.daysInMonth() - slipCount;
+			const soberCount = monthOfYear.daysInMonth() - slipCount;
 
 			return { slipCount, soberCount };
 		})
@@ -86,18 +82,18 @@
 				labels,
 				datasets: [
 					{
-						backgroundColor: 'rgb(202,53,0,0.6)',
+						backgroundColor: 'rgba(202, 53, 0, 0.6)',
 						borderColor: '#9f2d00',
 						borderWidth: 1.5,
-						data: [],
+						data: [10, 8, 12, 6, 9, 7, 5, 11, 4, 3, 2, 1],
 						label: 'Sober Days'
 					},
 					{
-						backgroundColor: 'rgb(255,105,0,0.6)',
+						backgroundColor: 'rgba(255, 105, 0, 0.6)',
 						borderColor: '#9f2d00',
 						borderSkipped: 'bottom',
 						borderWidth: 1.5,
-						data: [],
+						data: [10, 8, 12, 6, 9, 7, 5, 11, 4, 3, 2, 1].reverse(),
 						label: 'Slip Days'
 					}
 				]
