@@ -1,4 +1,5 @@
 import { pgTable, integer, text, timestamp, pgEnum } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 export const polarityEnum = pgEnum('polarity', ['positive', 'negative']);
 
@@ -58,6 +59,17 @@ export const user = pgTable('user', {
 	passwordHash: text('password_hash').notNull(),
 	createdAt: timestamp('created_at').defaultNow()
 });
+
+export const slipDateRelations = relations(slipDate, ({ one }) => ({
+	tracker: one(tracker, {
+		fields: [slipDate.trackerId],
+		references: [tracker.id]
+	})
+}));
+
+export const trackerRelations = relations(tracker, ({ many }) => ({
+	slipDates: many(slipDate)
+}));
 
 export type FreedomListItem = typeof freedomListItem.$inferSelect;
 export type FreedomListItemInsert = typeof freedomListItem.$inferInsert;

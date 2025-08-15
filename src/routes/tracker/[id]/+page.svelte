@@ -7,7 +7,7 @@
 
 <TrackerForm
 	{form}
-	slipDates={data.slipDates}
+	slipDates={data.tracker?.slipDates || []}
 	submitText="Update"
 	title="Update Progress Tracker"
 	tracker={data.tracker}
