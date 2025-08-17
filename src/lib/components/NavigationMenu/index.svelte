@@ -8,12 +8,15 @@
 		MobileMenuButtonStyles,
 		MobilePopoverStyles
 	} from './styles';
+	import { useMediaQuery } from '$lib/utils/useMediaQuery';
 	import type { Props } from './types';
 
 	let { links, isNavigating = false }: Props = $props();
 
 	let originalOverflow = $state('');
 	let popoverOpen = $state(false);
+
+	const isMediumScreen = useMediaQuery('(min-width: 768px)');
 
 	$effect(() => {
 		if (typeof document !== 'undefined' && popoverOpen) {
@@ -25,9 +28,9 @@
 
 	$effect(() => {
 		if (isNavigating) {
-			popoverOpen = false
+			popoverOpen = false;
 		}
-	})
+	});
 
 	onDestroy(() => {
 		if (typeof document !== 'undefined') document.body.style.overflow = originalOverflow;
@@ -42,7 +45,15 @@
 	<ul class="flex flex-col gap-5 md:flex-row md:items-center">
 		{#each links as { href, title }, index (index)}
 			<li class="list-none">
-				<a class={LinkStyles} {href}>{title}</a>
+				{#if href === '/logout' && $isMediumScreen}
+					<a
+						aria-label={title}
+						class="text-2xl outline-hidden hover:text-primary-600 focus:text-primary-600 md:text-primary-200 md:hover:text-primary-500 md:focus:text-primary-200 md:focus:ring-2 md:ring-primary-600 px-3 py-2.5 rounded-full"
+						{href}><i class="fa-solid fa-right-from-bracket"></i></a
+					>
+				{:else}
+					<a class={LinkStyles} {href}>{title}</a>
+				{/if}
 			</li>
 		{/each}
 	</ul>

@@ -7,9 +7,10 @@
 	let { anchorDate, anchorTime, className = '', cta, slipDates = [] }: Props = $props();
 
 	const lastSlipDate = $derived(
+		slipDates.length > 0 ?
 		slipDates
 			.map((date) => dayjs(`${date.date} ${date.time}`))
-			.reduce((latest, current) => (current.isAfter(latest) ? current : latest))
+			.reduce((latest, current) => (current.isAfter(latest) ? current : latest)) : undefined
 	);
 
 	const millisecondsSinceAnchor = $derived(

@@ -6,7 +6,6 @@ import { getRequiredSting } from '$lib/utils';
 import { requireLogin } from '$lib/utils';
 import type { Actions, PageServerLoad } from './$types';
 
-
 export const load: PageServerLoad = async ({ params }) => {
 	const user = requireLogin();
 	const freedomListItemId = params.id;
@@ -30,15 +29,14 @@ export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 		const freedomListItemId = event.params.id;
+		const reason = getRequiredSting(formData, 'reason', 'Reason');
+		const isPositive = formData.has('polarity');
+
+		if (typeof reason !== 'string') {
+			return fail(400);
+		}
 
 		try {
-			const reason = getRequiredSting(formData, 'reason', 'Reason');
-			const isPositive = formData.has('polarity');
-
-			if (typeof reason !== 'string') {
-				return fail(400);
-			}
-
 			await db
 				.update(freedomListItem)
 				.set({

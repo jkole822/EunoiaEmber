@@ -16,12 +16,14 @@ group-active:bg-red-500
 export const DefaultStyles = oneLine`
 bg-primary-800
 cursor-pointer
+font-medium
 outline-hidden
 px-4
 py-2
 ring-primary-600
 rounded-lg
 text-primary-50
+tracking-wide
 transition-all
 
 active:bg-primary-900

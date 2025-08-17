@@ -29,28 +29,27 @@ export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 		const urgeId = event.params.id;
+		const date = getRequiredSting(formData, 'date', 'Urge date');
+		const timeInput = getRequiredSting(formData, 'time', 'Urge time');
+		const intensityInput = getRequiredSting(formData, 'intensity', 'Intensity');
+		const intensity = Number(intensityInput);
+		const notes = getOptionalString(formData, 'notes');
+
+		if (typeof date !== 'string' || typeof timeInput !== 'string') {
+			return fail(400);
+		}
+
+		const time = timeInput.trim();
+
+		if (!dayjs(time, 'HH:mm', true).isValid()) {
+			return fail(400, { message: 'Invalid time format. Use HH:mm.' });
+		}
+
+		if (!Number.isFinite(intensity)) {
+			return fail(400, { message: 'Intensity must be a number.' });
+		}
 
 		try {
-			const date = getRequiredSting(formData, 'date', 'Urge date');
-			const timeInput = getRequiredSting(formData, 'time', 'Urge time');
-			const intensityInput = getRequiredSting(formData, 'intensity', 'Intensity');
-			const intensity = Number(intensityInput);
-			const notes = getOptionalString(formData, 'notes');
-
-			if (typeof date !== 'string' || typeof timeInput !== 'string') {
-				return fail(400);
-			}
-
-			const time = timeInput.trim();
-
-			if (!dayjs(time, 'HH:mm', true).isValid()) {
-				return fail(400, { message: 'Invalid time format. Use HH:mm.' });
-			}
-
-			if (!Number.isFinite(intensity)) {
-				return fail(400, { message: 'Intensity must be a number.' });
-			}
-
 			await db
 				.update(urge)
 				.set({

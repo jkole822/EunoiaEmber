@@ -38,10 +38,10 @@ w-fit
 
 md:text-primary-200
 
-focus:text-primary-600
+focus:text-primary-700
 md:focus:text-primary-50
 
-hover:text-primary-600
+hover:text-primary-700
 md:hover:text-primary-50
 
 after:-bottom-0.5

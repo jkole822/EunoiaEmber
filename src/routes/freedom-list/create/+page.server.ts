@@ -10,15 +10,14 @@ export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 		const user = requireLogin();
+		const reason = getRequiredSting(formData, 'reason', 'Reason');
+		const isPositive = formData.has('polarity');
+
+		if (typeof reason !== 'string') {
+			return fail(400);
+		}
 
 		try {
-			const reason = getRequiredSting(formData, 'reason', 'Reason');
-			const isPositive = formData.has('polarity');
-
-			if (typeof reason !== 'string') {
-				return fail(400);
-			}
-
 			const freedomListItemValues: FreedomListItemInsert = {
 				id: generateId(),
 				polarity: isPositive ? 'positive' : 'negative',

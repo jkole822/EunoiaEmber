@@ -9,7 +9,7 @@ export const freedomListItem = pgTable('freedomListItem', {
 	reason: text('reason').notNull(),
 	userId: text('user_id')
 		.notNull()
-		.references(() => user.id),
+		.references(() => user.id, { onDelete: 'cascade' }),
 	createdAt: timestamp('created_at').defaultNow()
 });
 
@@ -27,7 +27,7 @@ export const slipDate = pgTable('slip_date', {
 	time: text('time').notNull(),
 	trackerId: text('tracker_id')
 		.notNull()
-		.references(() => tracker.id),
+		.references(() => tracker.id, { onDelete: 'cascade' }),
 	createdAt: timestamp('created_at').defaultNow()
 });
 
@@ -37,7 +37,7 @@ export const tracker = pgTable('tracker', {
 	anchorTime: text('anchor_time').notNull(),
 	userId: text('user_id')
 		.notNull()
-		.references(() => user.id),
+		.references(() => user.id, { onDelete: 'cascade' }),
 	createdAt: timestamp('created_at').defaultNow()
 });
 
@@ -49,7 +49,7 @@ export const urge = pgTable('urge', {
 	notes: text('notes'),
 	userId: text('user_id')
 		.notNull()
-		.references(() => user.id),
+		.references(() => user.id, { onDelete: 'cascade' }),
 	createdAt: timestamp('created_at').defaultNow()
 });
 

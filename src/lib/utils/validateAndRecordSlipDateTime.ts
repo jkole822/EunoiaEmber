@@ -23,7 +23,7 @@ export async function recordSlipDateTime({
 	try {
 		await db.insert(slipDate).values(slipDateValues);
 	} catch {
-		return fail(500, { message: 'Failed to create tracker entry.' });
+		return fail(500, { message: 'An error has occurred.' });
 	}
 }
 

@@ -56,6 +56,7 @@ export const actions: Actions = {
 		} catch {
 			return fail(500, { message: 'An error has occurred' });
 		}
+
 		return redirect(302, '/login');
 	}
 };
