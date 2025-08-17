@@ -51,7 +51,7 @@
 			Freedom Reflections
 		</h2>
 		<Button
-			className="mb-5 w-full mx-auto 2xs:w-52 xs:hidden"
+			className="mb-5 w-full mx-auto xs:hidden"
 			href="/freedom-list/create"
 			variant={ButtonVariantsEnum.Emphasis}>Add Motivation</Button
 		>

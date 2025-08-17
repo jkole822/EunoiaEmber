@@ -3,9 +3,15 @@ import dayjs from 'dayjs';
 import { and, eq, sql } from 'drizzle-orm';
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { getRequiredSting, requireLogin, validateAndRecordSlipDateTime } from '$lib/utils';
+import {
+	getRequiredSting,
+	recordSlipDateTime,
+	requireLogin,
+	validateAndTrimSlipDateTime
+} from '$lib/utils';
 import { slipDate, tracker } from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
+import type { HttpError } from '@sveltejs/kit';
 
 dayjs.extend(customParseFormat);
 
@@ -23,7 +29,6 @@ export const load: PageServerLoad = async ({ params }) => {
 	});
 
 	return {
-		user,
 		tracker: trackerWithSlips
 	};
 };
@@ -41,37 +46,57 @@ export const actions: Actions = {
 			return fail(400);
 		}
 
+		if (!dayjs(anchorDate, 'YYYY-MM-DD', true).isValid()) {
+			return fail(400, { message: 'Invalid anchor date format. Use YYYY-MM-DD.' });
+		}
+
+		if (!dayjs(anchorTime, 'HH:mm', true).isValid()) {
+			return fail(400, { message: 'Invalid anchor time format. Use HH:mm.' });
+		}
+
 		const format = 'YYYY-MM-DD HH:mm';
 		const now = dayjs();
 		const anchorDateTime = dayjs(`${anchorDate} ${anchorTime}`, format);
-
-		if (!anchorDateTime.isValid()) {
-			return fail(400, { message: 'Invalid anchor date/time format.' });
-		}
 
 		if (anchorDateTime.isAfter(now)) {
 			return fail(400, { message: 'Anchor date cannot be in the future.' });
 		}
 
+		let slipDateTimes = [];
+
 		try {
+			slipDateTimes = slipDates.map((value) =>
+				validateAndTrimSlipDateTime({
+					anchorDateTime,
+					date: value,
+					time: slipTimes[slipDates.indexOf(value)]
+				})
+			);
+
 			await db.update(tracker).set({ anchorDate, anchorTime }).where(eq(tracker.id, trackerId));
-		} catch {
+		} catch (error) {
+			if ((error as HttpError).body?.message) {
+				return fail(400, { message: (error as HttpError).body.message });
+			}
+
 			return fail(500, { message: 'Failed to update tracker entry.' });
 		}
 
 		try {
 			await db.delete(slipDate).where(eq(slipDate.trackerId, trackerId));
 
-			slipDates.forEach((value, index) => {
-				validateAndRecordSlipDateTime({
-					anchorDateTime,
-					date: value,
-					time: slipTimes[index],
+			slipDateTimes.forEach((value) => {
+				recordSlipDateTime({
+					...value,
 					trackerId
 				});
 			});
-		} catch {
-			return fail(500, { message: 'Failed to update slip dates.' });
+		} catch (error) {
+			if ((error as HttpError).body?.message) {
+				return fail(400, { message: (error as HttpError).body.message });
+			}
+
+			return fail(500, { message: 'Failed to slip date entries.' });
 		}
 
 		return redirect(302, '/home');

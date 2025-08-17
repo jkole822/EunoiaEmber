@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { and, eq } from 'drizzle-orm';
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
@@ -31,13 +32,19 @@ export const actions: Actions = {
 
 		try {
 			const date = getRequiredSting(formData, 'date', 'Urge date');
-			const time = getRequiredSting(formData, 'time', 'Urge time');
-			const intensityRaw = getRequiredSting(formData, 'intensity', 'Intensity');
-			const intensity = Number(intensityRaw);
+			const timeInput = getRequiredSting(formData, 'time', 'Urge time');
+			const intensityInput = getRequiredSting(formData, 'intensity', 'Intensity');
+			const intensity = Number(intensityInput);
 			const notes = getOptionalString(formData, 'notes');
 
-			if (typeof date !== 'string' || typeof time !== 'string') {
+			if (typeof date !== 'string' || typeof timeInput !== 'string') {
 				return fail(400);
+			}
+
+			const time = timeInput.trim();
+
+			if (!dayjs(time, 'HH:mm', true).isValid()) {
+				return fail(400, { message: 'Invalid time format. Use HH:mm.' });
 			}
 
 			if (!Number.isFinite(intensity)) {

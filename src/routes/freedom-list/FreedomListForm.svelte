@@ -32,11 +32,12 @@
 	<Switch
 		bind:checked={polarity}
 		className="[&_.switch-container]:flex [&_.switch-container]:items-center [&_.switch-container]:gap-8 mb-7"
-		description="Toggle the switch if your input below represents a positive reason to abstain; otherwise, leave it up to indicate a negative aspect or memory related to use."		label="Polarity"
+		description="Toggle the switch if your input below represents a positive reason to abstain; otherwise, leave it up to indicate a negative aspect or memory related to use."
+		label="Polarity"
 		name="polarity"
 		withField
 		><div
-			class="flex size-12 items-center justify-center rounded-full bg-primary-800 text-primary-100 text-xl"
+			class="flex size-12 items-center justify-center rounded-full bg-primary-800 text-xl text-primary-100"
 			aria-hidden="true"
 			role="presentation"
 		>
@@ -51,6 +52,9 @@
 		label="Reason"
 		name="reason"
 	/>
-	<Button className="mt-10" type="submit" variant={ButtonVariantsEnum.Emphasis}>{submitText}</Button
+	<Button
+		className="mt-10 mx-auto w-full xs:w-52 md:mx-0"
+		type="submit"
+		variant={ButtonVariantsEnum.Emphasis}>{submitText}</Button
 	>
 </form>

@@ -49,7 +49,7 @@
 	{#if urgeData.length > 0}
 		<h2 class="mb-10 text-center font-mono text-3xl tracking-wide xs:text-5xl">Urge Log</h2>
 		<Button
-			className="mb-5 w-full mx-auto 2xs:w-52 xs:hidden"
+			className="mb-5 w-full mx-auto xs:hidden"
 			href="/urge/create"
 			variant={ButtonVariantsEnum.Emphasis}>Record Urge</Button
 		>

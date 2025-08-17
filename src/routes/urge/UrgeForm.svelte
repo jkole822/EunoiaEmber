@@ -1,5 +1,6 @@
 <script lang="ts">
 	import dayjs from 'dayjs';
+	import { onMount } from 'svelte';
 	import { parseDate } from '@ark-ui/svelte/date-picker';
 	import Button from '$lib/components/Button/index.svelte';
 	import DatePicker from '$lib/components/DatePicker/index.svelte';
@@ -17,16 +18,25 @@
 		urge
 	}: { form?: ActionData; submitText?: string; title?: string; urge?: Urge } = $props();
 
-	let date = $state(urge?.date ? [parseDate(dayjs(urge.date, 'MM/DD/YYYY').format('YYYY-MM-DD'))] : undefined);
+	let date = $state(
+		urge?.date ? [parseDate(dayjs(urge.date, 'MM/DD/YYYY').format('YYYY-MM-DD'))] : undefined
+	);
 	let intensity = $state(urge?.intensity ? String(urge?.intensity) : '1');
+	let isiOS = $state(false);
 	let notes = $state(urge?.notes ?? '');
-	let time = $state(urge?.time ?? '');
+	let time = $state(urge?.time ?? '00:00');
+
+	onMount(() => {
+		isiOS =
+			/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+			(navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+	});
 </script>
 
 <form class="my-10 rounded-lg bg-primary-100 p-10" method="post">
 	<h1 class="mb-10 text-center font-mono text-5xl tracking-wider">{title}</h1>
 	{#if form?.message}
-		<p class="mb-3 font-mono text-red-600 underline">{form.message}</p>
+		<p class="mb-3 text-center font-mono text-red-600">{form.message}</p>
 	{/if}
 	<DatePicker
 		bind:value={date}
@@ -39,11 +49,12 @@
 	/>
 	<Input
 		bind:value={time}
-		className="mb-7 [&_[type=time]_~_label]:bg-primary-100!"
+		className="mb-7 [&_input:focus_~_label]:bg-primary-100 [&_input]:data-[raise-label=true]:[&_~_label]:bg-primary-100 [&_[type=time]_~_label]:bg-primary-100!"
+		description={isiOS ? '24-Hour Format: HH:mm' : undefined}
 		label="Time"
 		name="time"
 		required
-		type={InputTypeEnum.time}
+		type={isiOS ? InputTypeEnum.text : InputTypeEnum.time}
 	/>
 	<NumberInput
 		bind:value={intensity}
@@ -64,6 +75,9 @@
 		label="Notes"
 		name="notes"
 	/>
-	<Button className="mt-10" type="submit" variant={ButtonVariantsEnum.Emphasis}>{submitText}</Button
+	<Button
+		className="mt-10 mx-auto w-full xs:w-52 md:mx-0"
+		type="submit"
+		variant={ButtonVariantsEnum.Emphasis}>{submitText}</Button
 	>
 </form>

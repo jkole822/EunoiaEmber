@@ -1,4 +1,6 @@
 <script lang="ts">
+	import dayjs from 'dayjs';
+	import { onMount } from 'svelte';
 	import Button from '$lib/components/Button/index.svelte';
 	import Input from '$lib/components/Input/index.svelte';
 	import NumberInput from '$lib/components/NumberInput/index.svelte';
@@ -26,8 +28,9 @@
 		submitText?: string;
 	} = $props();
 
-	let anchorDate = $state(tracker?.anchorDate || '');
+	let anchorDate = $state(tracker?.anchorDate || dayjs().format('YYYY-MM-DD'));
 	let anchorTime = $state(tracker?.anchorTime || '00:00');
+	let isiOS = $state(false);
 	let page = $state(1);
 	let previousPage = $state(1);
 	let slipCount = $state(slipDates ? String(slipDates.length) : '0');
@@ -80,18 +83,27 @@
 
 	$effect(() => {
 		if (slipCountNumber > slipDatesArray.length) {
-			const newSlipDates = Array.from({ length: slipCountNumber - slipDatesArray.length }, (_, i) => ({
-				createdAt: new Date(),
-				date: '',
-				id: '',
-				time: '00:00',
-				trackerId: ''
-			}));
+			const newSlipDates = Array.from(
+				{ length: slipCountNumber - slipDatesArray.length },
+				(_, i) => ({
+					createdAt: new Date(),
+					date: dayjs().format('YYYY-MM-DD'),
+					id: '',
+					time: '00:00',
+					trackerId: ''
+				})
+			);
 			slipDatesArray = [...slipDatesArray, ...newSlipDates];
 		} else if (slipCountNumber < slipDatesArray.length) {
 			slipDatesArray = slipDatesArray.slice(0, slipCountNumber);
 		}
-	})
+	});
+
+	onMount(() => {
+		isiOS =
+			/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+			(navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+	});
 </script>
 
 {#snippet submitButton()}
@@ -110,7 +122,7 @@
 
 	<h1 class={TitleStyles}>{title}</h1>
 	{#if form?.message}
-		<p class="mb-3 font-mono text-red-600 underline">{form.message}</p>
+		<p class="mb-3 text-center font-mono text-red-600">{form.message}</p>
 	{/if}
 	{#if tracker?.id}
 		<input name="id" type="hidden" value={tracker.id} />
@@ -129,16 +141,18 @@
 				<Input
 					bind:value={anchorDate}
 					className="xs:w-50"
+					description={isiOS ? 'Format: YYYY-MM-DD' : undefined}
 					label={steps[0].label}
 					required
-					type={InputTypeEnum.date}
+					type={isiOS ? InputTypeEnum.text : InputTypeEnum.date}
 				/>
 				<Input
 					bind:value={anchorTime}
 					className="xs:w-50"
+					description={isiOS ? '24-Hour Format: HH:mm' : undefined}
 					label={steps[0].labelTwo}
 					required
-					type={InputTypeEnum.time}
+					type={isiOS ? InputTypeEnum.text : InputTypeEnum.time}
 				/>
 			</div>
 		</Step>
@@ -172,19 +186,21 @@
 					<div class={SlipDateTimeInputContainer}>
 						<Input
 							className="xs:w-50"
+							description={isiOS ? 'Format: YYYY-MM-DD' : undefined}
 							label={steps[2].label}
 							oninput={(e) => handleSlipDateChange(e, index)}
 							required
-							type={InputTypeEnum.date}
+							type={isiOS ? InputTypeEnum.text : InputTypeEnum.date}
 							value={slipDatesArray[index]?.date}
 						/>
 						<Input
 							className="xs:w-50"
+							description={isiOS ? '24-Hour Format: HH:mm' : undefined}
 							label={steps[2].labelTwo}
 							oninput={(e) => handleSlipTimeChange(e, index)}
 							required
-							type={InputTypeEnum.time}
-							value={slipDatesArray[index]?.time || '00:00'}
+							type={isiOS ? InputTypeEnum.text : InputTypeEnum.time}
+							value={slipDatesArray[index]?.time}
 						/>
 					</div>
 				{/each}
