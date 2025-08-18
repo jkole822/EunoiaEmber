@@ -62,15 +62,17 @@
 				href="/freedom-list/create"
 				variant={ButtonVariantsEnum.Emphasis}>Add Motivation</Button
 			>
-			<Pagination
-				{disableNext}
-				{disablePrev}
-				nextLabel="display next page of freedom list items"
-				onnext={handleNext}
-				onprevious={handlePrevious}
-				previousLabel="display previous page of freedom list items"
-				text={String(page)}
-			/>
+			{#if data.count > FREEDOM_LIST_ITEM_LIMIT}
+				<Pagination
+					{disableNext}
+					{disablePrev}
+					nextLabel="display next page of freedom list items"
+					onnext={handleNext}
+					onprevious={handlePrevious}
+					previousLabel="display previous page of freedom list items"
+					text={String(page)}
+				/>
+			{/if}
 		</div>
 	{:else}
 		<div class="flex flex-col items-center justify-center rounded-xl bg-primary-100 p-20">

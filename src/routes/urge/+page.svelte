@@ -58,15 +58,17 @@
 			<Button className="hidden xs:flex" href="/urge/create" variant={ButtonVariantsEnum.Emphasis}
 				>Record Urge</Button
 			>
-			<Pagination
-				{disableNext}
-				{disablePrev}
-				nextLabel="display next page of urges"
-				onnext={handleNext}
-				onprevious={handlePrevious}
-				previousLabel="display previous page of urges"
-				text={String(page)}
-			/>
+			{#if data.count > URGE_LIMIT}
+				<Pagination
+					{disableNext}
+					{disablePrev}
+					nextLabel="display next page of urges"
+					onnext={handleNext}
+					onprevious={handlePrevious}
+					previousLabel="display previous page of urges"
+					text={String(page)}
+				/>
+			{/if}
 		</div>
 	{:else}
 		<div class="flex flex-col items-center justify-center rounded-xl bg-primary-100 p-20">
