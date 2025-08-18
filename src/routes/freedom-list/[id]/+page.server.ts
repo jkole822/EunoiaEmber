@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import { fail, redirect } from '@sveltejs/kit';
+import * as table from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
-import { freedomListItem } from '$lib/server/db/schema';
 import { getRequiredSting } from '$lib/utils';
 import { requireLogin } from '$lib/utils';
 import type { Actions, PageServerLoad } from './$types';
@@ -10,18 +10,19 @@ export const load: PageServerLoad = async ({ params }) => {
 	const user = requireLogin();
 	const freedomListItemId = params.id;
 
-	const [existingFreedomListItem] = await db
-		.select()
-		.from(freedomListItem)
-		.where(and(eq(freedomListItem.userId, user.id), eq(freedomListItem.id, freedomListItemId)))
-		.limit(1);
+	const freedomListItem = await db.query.freedomListItem.findFirst({
+		where: and(
+			eq(table.freedomListItem.userId, user.id),
+			eq(table.freedomListItem.id, freedomListItemId)
+		)
+	});
 
-	if (!existingFreedomListItem) {
+	if (!freedomListItem) {
 		return fail(404, { message: 'Page not found.' });
 	}
 
 	return {
-		freedomListItem: existingFreedomListItem
+		freedomListItem
 	};
 };
 
@@ -38,12 +39,12 @@ export const actions: Actions = {
 
 		try {
 			await db
-				.update(freedomListItem)
+				.update(table.freedomListItem)
 				.set({
 					polarity: isPositive ? 'positive' : 'negative',
 					reason
 				})
-				.where(eq(freedomListItem.id, freedomListItemId));
+				.where(eq(table.freedomListItem.id, freedomListItemId));
 		} catch {
 			return fail(500, { message: 'Failed to update freedom list item entry.' });
 		}

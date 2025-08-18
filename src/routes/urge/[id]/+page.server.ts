@@ -1,27 +1,25 @@
 import dayjs from 'dayjs';
 import { and, eq } from 'drizzle-orm';
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
+import * as table from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
 import { getOptionalString, getRequiredSting, requireLogin } from '$lib/utils';
-import { urge } from '$lib/server/db/schema';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const user = requireLogin();
 	const urgeId = params.id;
 
-	const [existingUrge] = await db
-		.select()
-		.from(urge)
-		.where(and(eq(urge.userId, user.id), eq(urge.id, urgeId)))
-		.limit(1);
+	const urge = await db.query.urge.findFirst({
+		where: and(eq(table.urge.userId, user.id), eq(table.urge.id, urgeId))
+	});
 
-	if (!existingUrge) {
+	if (!urge) {
 		return fail(404, { message: 'Page not found.' });
 	}
 
 	return {
-		urge: existingUrge
+		urge
 	};
 };
 
@@ -51,14 +49,14 @@ export const actions: Actions = {
 
 		try {
 			await db
-				.update(urge)
+				.update(table.urge)
 				.set({
 					date,
 					time,
 					intensity,
 					notes
 				})
-				.where(eq(urge.id, urgeId));
+				.where(eq(table.urge.id, urgeId));
 		} catch {
 			return fail(500, { message: 'Failed to update urge entry.' });
 		}

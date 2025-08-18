@@ -8,7 +8,7 @@
 	let { form }: { form: ActionData } = $props();
 </script>
 
-<div class="mx-auto my-10 max-w-3xl rounded-lg bg-primary-100 p-10">
+<div class="mx-auto my-10 max-w-2xl rounded-lg bg-primary-100 p-10">
 	<h1 class="mb-10 text-center font-mono text-5xl tracking-wider">Manage Account</h1>
 	{#if form?.message}
 		<p class="mb-3 text-center font-mono text-red-600">{form.message}</p>

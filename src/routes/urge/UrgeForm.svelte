@@ -26,6 +26,16 @@
 	let notes = $state(urge?.notes ?? '');
 	let time = $state(urge?.time ?? '00:00');
 
+	const handleDelete = async () => {
+		if (urge) {
+			const res = await fetch(`/urge/${urge.id}/delete`, { method: 'DELETE' });
+
+			if (res.ok) {
+				window.location.href = '/urge';
+			}
+		}
+	};
+
 	onMount(() => {
 		isiOS =
 			/iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -33,7 +43,7 @@
 	});
 </script>
 
-<form class="my-10 rounded-lg bg-primary-100 p-10" method="post">
+<form class="mx-auto my-10 max-w-2xl rounded-lg bg-primary-100 p-10" method="post">
 	<h1 class="mb-10 text-center font-mono text-5xl tracking-wider">{title}</h1>
 	{#if form?.message}
 		<p class="mb-3 text-center font-mono text-red-600">{form.message}</p>
@@ -75,9 +85,17 @@
 		label="Notes"
 		name="notes"
 	/>
-	<Button
-		className="mt-10 mx-auto w-full xs:w-52 md:mx-0"
-		type="submit"
-		variant={ButtonVariantsEnum.Emphasis}>{submitText}</Button
+	<div
+		class={[
+			'mt-10 flex flex-col items-center justify-center gap-4 xs:flex-row xs:justify-between',
+			urge ? '' : ''
+		]}
 	>
+		<Button className="w-full xs:w-52" type="submit" variant={ButtonVariantsEnum.Emphasis}
+			>{submitText}</Button
+		>
+		{#if urge}
+			<Button className="w-full xs:w-auto" onclick={handleDelete} type="submit">Delete</Button>
+		{/if}
+	</div>
 </form>
