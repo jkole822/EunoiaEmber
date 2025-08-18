@@ -5,6 +5,7 @@ bg-primary-50
 cursor-pointer
 font-semibold
 lowercase
+outline-hidden
 px-3
 ring
 ring-primary-700
@@ -21,6 +22,9 @@ last:rounded-tr
 
 data-[state='on']:bg-primary-300
 data-[state='on']:text-primary-900
+
+focus:ring-2
+focus:z-10
 
 hover:bg-primary-200
 hover:text-primary-800

@@ -40,7 +40,10 @@
 			>Submit</Button
 		>
 		<div class="text-center">
-			Return to <a class="underline" href="/register">Sign In</a>
+			Return to <a
+				class="rounded underline ring-primary-600 outline-hidden focus:ring-2"
+				href="/register">Sign In</a
+			>
 		</div>
 	</form>
 </div>

@@ -31,7 +31,7 @@
 			required
 			type={InputTypeEnum.password}
 		/>
-		<Button className="mt-5 w-full xs:w-52" type="submit">Update</Button>
+		<Button className="mt-5 w-full xs:w-auto" type="submit">Update</Button>
 	</form>
 
 	<form action="?/deleteAccount" class="mt-15" method="post">
@@ -39,7 +39,7 @@
 		<Input
 			autocomplete={AutoCompleteEnum.off}
 			className="[&_input:focus_~_label]:bg-primary-100 [&_input]:data-[raise-label=true]:[&_~_label]:bg-primary-100 mb-5"
-			description="To delete your account, please enter the confirmation text &quot;delete my account&quot; and your password below. This action is permanent and cannot be undone."
+			description="To delete your account, please enter the confirmation text &quot;delete my account&quot; into the above text field and your password below. This action is permanent and cannot be undone."
 			label="Confirmation Text"
 			name="confirmation"
 			required
@@ -53,6 +53,6 @@
 			required
 			type={InputTypeEnum.password}
 		/>
-		<Button className="mt-5 w-full xs:w-52" type="submit">Delete</Button>
+		<Button className="mt-5 w-full xs:w-auto" type="submit">Delete</Button>
 	</form>
 </div>

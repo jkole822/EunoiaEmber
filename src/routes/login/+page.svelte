@@ -43,12 +43,18 @@
 			required
 			type={InputTypeEnum.password}
 		/>
-		<a class="mb-5 block text-right underline" href="/request-password-reset">Forgot Password</a>
+		<a
+			class="mb-5 ml-auto block w-fit rounded underline ring-primary-600 outline-hidden focus:ring-2"
+			href="/request-password-reset">Forgot Password</a
+		>
 		<Button className="mb-5 w-full" type="submit" variant={ButtonVariantsEnum.Emphasis}
 			>Sign In</Button
 		>
 		<div class="text-center">
-			Need an account? <a class="underline" href="/register">Sign Up</a>
+			Need an account? <a
+				class="rounded underline ring-primary-600 outline-hidden focus:ring-2"
+				href="/register">Sign Up</a
+			>
 		</div>
 	</form>
 </div>
